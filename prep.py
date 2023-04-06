@@ -47,11 +47,6 @@ def load_data():
   pass
 
 
-# Parameters for pre-proc.
-def load_cnf():
-  pass
-
-
 # Beginning ...
 def main():        
     params = ut.load_cnf()	
@@ -63,5 +58,4 @@ def main():
 
 if __name__ == '__main__':   
 	 main()
-
 
