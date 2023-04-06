@@ -42,17 +42,25 @@ def create_features(X,Param):
 
 
 # Load data from ClassXX.csv
-def load_data():
-  pass
+def load_data(n_classes):
+  list_classes = []
+  for i in range(n_classes):
+    file_data = f'data/Data{n_classes}/class{i + 1}.csv'
+    x = np.loadtxt(file_data, delimiter=',')
+    list_classes.append(x)
+
+  raw_data = np.array(list_classes)
+  return raw_data
 
 
 # Beginning ...
 def main():        
-  params = ut.load_cnf()	
-  print(params)
+  param = ut.load_cnf()	
+  print(param)
 
-  #data = load_data()	
-  #input_dat, out_dat = create_features(data, params)
+  data = load_data(param['n_classes'])	
+  print(data.shape)
+  #input_dat, out_dat = create_features(data, param)
   #input_dat = data_norm(input_dat)
   #save_data(input_dat, out_dat)
 
