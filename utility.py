@@ -1,6 +1,5 @@
 # My Utility : auxiliars functions
 
-import pandas as pd
 import numpy  as np
   
 #load parameters to train the SNN
