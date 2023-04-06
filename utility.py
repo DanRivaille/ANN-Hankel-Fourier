@@ -9,7 +9,7 @@ def load_cnf():
 
 
 # Initialize weights for SNN-SGDM
-def iniWs(Param):    
+def iniWs(param):    
   pass
 
 
@@ -21,36 +21,36 @@ def iniW(next, prev):
   return w
 
 # Feed-forward of SNN
-def forward(...):
+def forward():
   pass
 
 
 #Activation function
-def act_function(...):
+def act_function():
   pass
 
 
 # Derivatives of the activation funciton
-def deriva_act(...):
+def deriva_act():
   pass
 
 
 #Feed-Backward of SNN
-def gradW(...):    
+def gradW():
   pass
 
 
 # Update W and V
-def updWV_sgdm(...):
+def updWV_sgdm():
   pass
 
 
 # Measure
-def metricas(x,y):
+def metricas(x, y):
   pass
     
 
 #Confusion matrix
-def confusion_matrix(z,y):
+def confusion_matrix(z, y):
   pass
 
