@@ -4,7 +4,31 @@ import numpy  as np
   
 #load parameters to train the SNN
 def load_cnf():
-  pass
+  FILE_CNF = 'cnf.csv'
+  param = dict()
+  cnf_list = np.loadtxt('FILE_CNF', dtype=float)
+
+  param['n_classes'] = int(cnf_list[0])
+  param['n_frame'] = int(cnf_list[1])
+  param['l_frame'] = int(cnf_list[2])
+  param['j_desc'] = int(cnf_list[3])
+
+  hidden_nodes_layer_1 = int(cnf_list[4])
+  hidden_nodes_layer_2 = int(cnf_list[5])
+
+  param['g_fun'] = int(cnf_list[6])
+  param['train_factor'] = cnf_list[7]
+  param['M_batch'] = int(cnf_list[8])
+  param['mu'] = cnf_list[9]
+  param['beta'] = cnf_list[10]
+  param['max_iter'] = int(cnf_list[11]
+
+  if hidden_nodes_layer_2 != 0:
+    param['hidden_nodes'] = [hidden_nodes_layer_1, hidden_nodes_layer_2]
+  else:
+    param['hidden_nodes'] = [hidden_nodes_layer_1]
+
+  return param
 
 
 def get_one_hot(y):

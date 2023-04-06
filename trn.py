@@ -21,7 +21,7 @@ def trn_minibatch(x, y, param):
 
 #SNN's Training 
 def train(x, y, param):    
-  W, V = iniWs()
+  W, V = ut.iniWs()
   pass
   #return(W, Costo)
 
