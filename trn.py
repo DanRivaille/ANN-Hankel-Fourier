@@ -4,8 +4,8 @@ import numpy      as np
 import utility    as ut
 
 #Save weights and MSE  of the SNN
-def save_w_mse():
-  pass
+def save_w_mse(ann_MSE):
+  np.savetxt("costo.csv", np.array(ann_MSE))
 
 
 #gets Index for n-th miniBatch
