@@ -1,6 +1,11 @@
 # My Utility : auxiliars functions
 
 import numpy  as np
+
+# Constantes
+_alpha_elu = 0.1
+_alpha_selu = 1.6732
+_lambda = 1.0507
   
 #load parameters to train the SNN
 def load_cnf():
@@ -75,16 +80,7 @@ def create_ann(hidden_nodes):
 
 # Feed-forward of SNN
 def forward(ann, param, X):
-  for l in range(1, ann['L'] + 1):
-    if ann['L'] == l:
-      num_funct = 5
-    else:
-      num_funct = param['g_fun']
-
-    ann['z'][l] = np.matmaul(ann['W'][l], ann['a'][l - 1])
-    ann['a'][l] = act_function(num_funct, X)
-
-  return ann['a'][-1]
+  pass
 
 
 #Activation function
