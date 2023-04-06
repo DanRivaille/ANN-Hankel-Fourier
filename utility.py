@@ -75,7 +75,6 @@ def create_ann(hidden_nodes, X):
   z = [None] * (n_layers + 1)   # transfer matrixes
 
   ann = {'W': W, 'a': a, 'z': z, 'L': n_layers, 'hidden_nodes': hidden_nodes}
-  ann['a'][0] = X
   return ann
 
 
@@ -124,12 +123,12 @@ def dev_sigmoid(x):
 
 
 #Feed-Backward of SNN
-def gradW():
+def gradW(ann, param, e):
   pass
 
 
 # Update W and V
-def updWV_sgdm():
+def updWV_sgdm(ann, param, dE_dW, V):
   pass
 
 

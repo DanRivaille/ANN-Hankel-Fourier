@@ -31,9 +31,9 @@ def load_data_test():
 def main():			
   param = ut.load_cnf()
   xv, yv  = load_data_test()
-  ann = ut.create_ann(param['hidden_nodes'])
+  ann = ut.create_ann(param['hidden_nodes'], xv)
   ann['W'] = load_w(ann['L'])
-  #aL = ut.forward(ann, param, xv)      		
+  aL = ut.forward(ann, param, xv)
   #cm, Fsc = ut.metricas(aL, yv) 	
   #save_measure(cm, Fsc)
 		

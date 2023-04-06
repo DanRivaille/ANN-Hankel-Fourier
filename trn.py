@@ -5,7 +5,7 @@ import utility    as ut
 
 #Save weights and MSE  of the SNN
 def save_w_mse(W, ann_MSE):
-  #np.savez('w_snn.npz', W[1], W[2])
+  #np.savez('w_snn.npz', *W)
   #np.savetxt("costo.csv", np.array(ann_MSE))
   pass
 
@@ -16,23 +16,23 @@ def get_Idx_n_Batch(n, x, N):
 
 
 #miniBatch-SGDM's Training 
-def trn_minibatch(x, y, param):    
+def trn_minibatch(x, y, ann, param, V):
   pass
-
-def init_ann(param, x):
-  ann = ut.create_ann(param['hidden_nodes'])
-  d = x.shape[0]
-  ann['W'] = ut.iniWs(ann['W'], ann['L'], d, param['n_classes'], param['hidden_nodes'])
-  for i in range(ann['L']):
-    print(ann['W'][i + 1].shape)
-  return ann
 
 
 #SNN's Training 
-def train(x, y, param):    
+def train(x, y, param):
   ann = init_ann(param, x)
 
   return ann['W']#, Costo
+
+
+def init_ann(param, x):
+  ann = ut.create_ann(param['hidden_nodes'], x)
+  d = x.shape[0]
+  ann['W'] = ut.iniWs(ann['W'], ann['L'], d, param['n_classes'], param['hidden_nodes'])
+
+  return ann
 
 
 # Load data to train the SNN
@@ -46,10 +46,7 @@ def load_data_trn():
 # Beginning ...
 def main():
   param = ut.load_cnf()            
-  xe, ye = load_data_trn()   
-  print(param)
-  print(xe.shape)
-  print(ye.shape)
+  xe, ye = load_data_trn()
   W = train(xe, ye, param)
   #W, Cost = train(xe, ye, param)             
   #save_w_cost(W, Cost)
