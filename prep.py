@@ -17,7 +17,7 @@ def binary_label():
 
 
 # Fourier spectral entropy
-def entropy_spectral(...):
+def entropy_spectral():
   pass
 
 
@@ -48,11 +48,13 @@ def load_data():
 
 # Beginning ...
 def main():        
-    params = ut.load_cnf()	
-    data = load_data()	
-    input_dat, out_dat = create_features(data, params)
-    input_dat = data_norm(input_dat)
-    save_data(input_dat, out_dat)
+  params = ut.load_cnf()	
+  print(params)
+
+  #data = load_data()	
+  #input_dat, out_dat = create_features(data, params)
+  #input_dat = data_norm(input_dat)
+  #save_data(input_dat, out_dat)
 
 
 if __name__ == '__main__':   

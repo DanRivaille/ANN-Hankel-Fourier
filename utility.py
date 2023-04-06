@@ -6,7 +6,7 @@ import numpy  as np
 def load_cnf():
   FILE_CNF = 'cnf.csv'
   param = dict()
-  cnf_list = np.loadtxt('FILE_CNF', dtype=float)
+  cnf_list = np.loadtxt(FILE_CNF, dtype=float)
 
   param['n_classes'] = int(cnf_list[0])
   param['n_frame'] = int(cnf_list[1])
@@ -21,7 +21,7 @@ def load_cnf():
   param['M_batch'] = int(cnf_list[8])
   param['mu'] = cnf_list[9]
   param['beta'] = cnf_list[10]
-  param['max_iter'] = int(cnf_list[11]
+  param['max_iter'] = int(cnf_list[11])
 
   if hidden_nodes_layer_2 != 0:
     param['hidden_nodes'] = [hidden_nodes_layer_1, hidden_nodes_layer_2]
