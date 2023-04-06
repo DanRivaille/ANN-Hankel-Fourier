@@ -74,7 +74,7 @@ def create_ann(hidden_nodes):
 
 
 # Feed-forward of SNN
-def forward():
+def forward(ann, param):
   pass
 
 
