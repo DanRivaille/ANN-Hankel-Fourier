@@ -1,6 +1,7 @@
 # Proyect things
 *.csv
 *.npz
+dev.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
