@@ -21,8 +21,14 @@ def load_data(file_x, file_y):
 
 
 # Initialize weights for SNN-SGDM
-def iniWs(param):    
-  pass
+def iniWs(W, L, d, m, n_nodes):    
+  W[1] = initW(n_nodes[0], d)
+  W[L] = initW(m, n_nodes[-1])
+
+  for i in range(L - 2):
+    W[i + 2] = initW(n_nodes[i + 1], n_nodes[i])
+
+  return W
 
 
 # Initialize weights for one-layer    
@@ -31,6 +37,17 @@ def iniW(next, prev):
   w = np.random.rand(next, prev)
   w = w * 2 * r - r    
   return w
+
+# Create a dictionary with the ann info
+def create_ann(hidden_nodes):
+  n_layers = len(hidden_nodes) + 1
+  W = [None] * (n_layers + 1)   # Weights matrixes
+  a = [None] * (n_layers + 1)   # activation matrixes
+  z = [None] * (n_layers + 1)   # transfer matrixes
+
+  ann = {'W': W, 'a': a, 'z': z, 'L': n_layers, 'hidden_nodes': hidden_nodes}
+  return ann
+
 
 # Feed-forward of SNN
 def forward():
