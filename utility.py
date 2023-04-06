@@ -68,13 +68,14 @@ def iniW(next, prev):
   return w
 
 # Create a dictionary with the ann info
-def create_ann(hidden_nodes):
+def create_ann(hidden_nodes, X):
   n_layers = len(hidden_nodes) + 1
   W = [None] * (n_layers + 1)   # Weights matrixes
   a = [None] * (n_layers + 1)   # activation matrixes
   z = [None] * (n_layers + 1)   # transfer matrixes
 
   ann = {'W': W, 'a': a, 'z': z, 'L': n_layers, 'hidden_nodes': hidden_nodes}
+  ann['a'][0] = X
   return ann
 
 

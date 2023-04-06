@@ -25,7 +25,6 @@ def init_ann(param, x):
   ann['W'] = ut.iniWs(ann['W'], ann['L'], d, param['n_classes'], param['hidden_nodes'])
   for i in range(ann['L']):
     print(ann['W'][i + 1].shape)
-  ann['a'][0] = x
   return ann
 
 
