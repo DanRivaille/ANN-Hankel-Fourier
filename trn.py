@@ -15,14 +15,19 @@ def get_Idx_n_Batch(n, x, N):
 
 #miniBatch-SGDM's Training 
 def trn_minibatch(x, y, param):    
-  W,V   = iniWs()
   pass
+
+def init_ann(param, x):
+  ann = ut.create_ann(param['hidden_nodes'])
+  d = x.shape[0]
+  ann['W'] = ut.iniWs(ann['W'], ann['L'], d, param['n_classes'], param['hidden_nodes'])
+  return ann
 
 
 #SNN's Training 
 def train(x, y, param):    
-  W, V = ut.iniWs()
-  pass
+  ann = init_ann(param, x)
+
   #return(W, Costo)
 
 
@@ -38,8 +43,12 @@ def load_data_trn():
 def main():
   param = ut.load_cnf()            
   xe, ye = load_data_trn()   
-  W, Cost = train(xe, ye, param)             
-  save_w_cost(W, Cost)
+  print(param)
+  print(xe.shape)
+  print(ye.shape)
+  train(xe, ye, param)
+  #W, Cost = train(xe, ye, param)             
+  #save_w_cost(W, Cost)
 
 
 if __name__ == '__main__':   

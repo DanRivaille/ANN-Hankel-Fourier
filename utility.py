@@ -39,18 +39,18 @@ def get_one_hot(y):
 
 # Load data from filename
 def load_data(file_x, file_y):
-  X = np.loadtxt(file_x, delimiter=',', dtype=float)
-  y = get_one_hot(np.loadtxt(file_y, dtype=int))
+  X = np.loadtxt(file_x, delimiter=',', dtype=float).T
+  y = get_one_hot(np.loadtxt(file_y, dtype=int)).T
   return X, y
 
 
 # Initialize weights for SNN-SGDM
 def iniWs(W, L, d, m, n_nodes):    
-  W[1] = initW(n_nodes[0], d)
-  W[L] = initW(m, n_nodes[-1])
+  W[1] = iniW(n_nodes[0], d)
+  W[L] = iniW(m, n_nodes[-1])
 
   for i in range(L - 2):
-    W[i + 2] = initW(n_nodes[i + 1], n_nodes[i])
+    W[i + 2] = iniW(n_nodes[i + 1], n_nodes[i])
 
   return W
 
