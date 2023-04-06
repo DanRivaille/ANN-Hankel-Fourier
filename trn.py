@@ -4,7 +4,8 @@ import numpy      as np
 import utility    as ut
 
 #Save weights and MSE  of the SNN
-def save_w_mse(ann_MSE):
+def save_w_mse(W, ann_MSE):
+  np.savez('w_snn.npz', W)
   np.savetxt("costo.csv", np.array(ann_MSE))
 
 
