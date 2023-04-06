@@ -38,13 +38,42 @@ def forward():
 
 
 #Activation function
-def act_function():
-  pass
-
+def act_function(num_function, x):
+  if 1 == num_function:	# Relu
+    return np.maximum(0, x)
+  if 2 == num_function:	# L-Relu
+    return np.maximum(0.01 * x, x)
+  if 3 == num_function: 	# ELU
+    return np.maximum(_alpha_elu * (np.exp(x) - 1), x)
+  if 4 == num_function:	# SELU
+    return np.maximum(_lambda * _alpha_selu * (np.exp(x) - 1), _lambda * x)
+  if 5 == num_function:	# Sigmoide
+    return sigmoid(x)
+  else:
+    return None
 
 # Derivatives of the activation funciton
-def deriva_act():
-  pass
+def deriva_act(num_function, x):
+  if 1 == num_function:	# Relu
+    return np.greater(x, 0).astype(float)
+  if 2 == num_function:	# L-Relu
+    return np.piecewise(x, [x <= 0, x > 0], [lambda e: 0.01, lambda e: 1])
+  if 3 == num_function: 	# ELU
+    return np.piecewise(x, [x <= 0, x > 0], [lambda e: 0.1 * np.exp(e), lambda e: 1])
+  if 4 == num_function:	# SELU
+    return np.piecewise(x, [x <= 0, x > 0], [lambda e: _lambda * _alpha_selu * np.exp(e), lambda e: _lambda])
+  if 5 == num_function:	# Sigmoide
+    return dev_sigmoid(x)
+  else:
+    return None
+
+def sigmoid(x):
+  f_x = 1 / (1 + np.exp(-x))
+  return f_x
+
+def dev_sigmoid(x):
+  f_x = sigmoid(x)
+  return f_x * (1 - f_x)
 
 
 #Feed-Backward of SNN
