@@ -75,7 +75,16 @@ def create_ann(hidden_nodes):
 
 # Feed-forward of SNN
 def forward(ann, param, X):
-  pass
+  for l in range(1, ann['L'] + 1):
+    if ann['L'] == l:
+      num_funct = 5
+    else:
+      num_funct = param['g_fun']
+
+    ann['z'][l] = np.matmaul(ann['W'][l], ann['a'][l - 1])
+    ann['a'][l] = act_function(num_funct, X)
+
+  return ann['a'][-1]
 
 
 #Activation function

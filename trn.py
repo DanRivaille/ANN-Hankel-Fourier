@@ -5,8 +5,9 @@ import utility    as ut
 
 #Save weights and MSE  of the SNN
 def save_w_mse(W, ann_MSE):
-  np.savez('w_snn.npz', W)
-  np.savetxt("costo.csv", np.array(ann_MSE))
+  #np.savez('w_snn.npz', W[1], W[2])
+  #np.savetxt("costo.csv", np.array(ann_MSE))
+  pass
 
 
 #gets Index for n-th miniBatch
@@ -22,6 +23,9 @@ def init_ann(param, x):
   ann = ut.create_ann(param['hidden_nodes'])
   d = x.shape[0]
   ann['W'] = ut.iniWs(ann['W'], ann['L'], d, param['n_classes'], param['hidden_nodes'])
+  for i in range(ann['L']):
+    print(ann['W'][i + 1].shape)
+  ann['a'][0] = x
   return ann
 
 
@@ -29,7 +33,7 @@ def init_ann(param, x):
 def train(x, y, param):    
   ann = init_ann(param, x)
 
-  #return(W, Costo)
+  return ann['W']#, Costo
 
 
 # Load data to train the SNN
@@ -47,9 +51,10 @@ def main():
   print(param)
   print(xe.shape)
   print(ye.shape)
-  train(xe, ye, param)
+  W = train(xe, ye, param)
   #W, Cost = train(xe, ye, param)             
   #save_w_cost(W, Cost)
+  np.savez('w_snn.npz', *W)
 
 
 if __name__ == '__main__':   
