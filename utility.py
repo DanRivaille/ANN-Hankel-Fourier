@@ -74,7 +74,7 @@ def create_ann(hidden_nodes):
 
 
 # Feed-forward of SNN
-def forward(ann, param):
+def forward(ann, param, X):
   pass
 
 
@@ -128,11 +128,11 @@ def updWV_sgdm():
 
 
 # Measure
-def metricas(x, y):
+def metricas(a, y):
   pass
     
 
 #Confusion matrix
-def confusion_matrix(z, y):
+def confusion_matrix(a, y):
   pass
 
