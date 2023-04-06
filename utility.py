@@ -7,6 +7,19 @@ def load_cnf():
   pass
 
 
+def get_one_hot(y):
+  K = np.unique(y).shape[0]
+  res = np.eye(K)[(y-1).reshape(-1)]
+  return res.reshape(list(y.shape)+[K]).astype(int)
+
+
+# Load data from filename
+def load_data(file_x, file_y):
+  X = np.loadtxt(file_x, delimiter=',', dtype=float)
+  y = get_one_hot(np.loadtxt(file_y, dtype=int))
+  return X, y
+
+
 # Initialize weights for SNN-SGDM
 def iniWs(param):    
   pass

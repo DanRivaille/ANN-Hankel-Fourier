@@ -10,7 +10,10 @@ def load_w():
 
 
 def load_data_test():
-  pass
+  FILE_X = 'dtst.csv'
+  FILE_Y = 'etst.csv'
+  X_test, y_test = ut.load_data(FILE_X, FILE_Y)
+  return X_test, y_test
     
 
 # Beginning ...

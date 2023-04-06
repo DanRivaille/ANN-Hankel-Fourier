@@ -28,7 +28,10 @@ def train(x, y, param):
 
 # Load data to train the SNN
 def load_data_trn():
-  pass
+  FILE_X = 'dtrn.csv'
+  FILE_Y = 'etrn.csv'
+  X_train, y_train = ut.load_data(FILE_X, FILE_Y)
+  return X_train, y_train
 
 
 # Beginning ...
