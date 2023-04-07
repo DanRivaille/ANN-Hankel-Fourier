@@ -22,7 +22,7 @@ def load_cnf():
   hidden_nodes_layer_2 = int(cnf_list[5])
 
   param['g_fun'] = int(cnf_list[6])
-  param['train_factor'] = cnf_list[7]
+  param['p_train'] = cnf_list[7]
   param['M_batch'] = int(cnf_list[8])
   param['mu'] = cnf_list[9]
   param['beta'] = cnf_list[10]
