@@ -1,5 +1,8 @@
 import numpy      as np
 import utility    as ut
+from hankel import compute_singular_decomposition
+from entropy import calculate_entropy
+from fourier import compute_fourier
 
 # Save Data from  Hankel's features
 def save_data(X, Y, param):
@@ -55,8 +58,13 @@ def binary_label(class_i, N):
 
 
 # Fourier spectral entropy
-def entropy_spectral():
-  pass
+def entropy_spectral(component):
+  N = component.shape[0]
+  Ix = int(np.sqrt(N))
+
+  c_fourier = compute_fourier(component)
+  c_fourier = normalize_var(c_fourier)
+  return calculate_entropy(c_fourier, N, Ix)
 
 
 # Hankel-SVD
@@ -65,18 +73,34 @@ def hankel_svd():
 
 
 # Hankel's features 
-def hankel_features(x, param):
-  # TODO: Program this function
-  return x[:100]
+def hankel_features(x, nFrame, lFrame, j):
+  F = np.empty((nFrame, 2 ** (j + 1)))
+  for n in range(nFrame):
+    current_frame = x[n:n + lFrame]
+    C, Sc = compute_singular_decomposition(current_frame, j)
 
+    entropy_c = []
+    for c in C:
+      spectral_entropy = entropy_spectral(c)
+      entropy_c.append(spectral_entropy)
+
+    F[n] = np.concatenate((entropy_c, Sc))
+
+  return F
+  
 
 # Obtain j-th variables of the i-th class
 def data_class(x, j, i):
   return x[i, j]
 
+def stack_arrays(stacked_array, new_array):
+  if stacked_array.shape[0] != 0:
+    return np.concatenate((stacked_array, new_array))
+  else:
+    return new_array
+
 
 # Create Features from Data
-# TODO: Finish this function
 def create_features(data, param):
   nbrClass = param['n_classes']
   nbrVariables = data.shape[0]
@@ -89,10 +113,11 @@ def create_features(data, param):
     datF = np.array([])
     for j in range(nbrVariables):
       x = data_class(data, j, i)
-      F = hankel_features(x, param)
-      datF = np.concatenate((datF, F))
+      F = hankel_features(x, param['n_frame'], param['l_frame'], param['j_desc'])
+      X = stack_arrays(X, F)
     
-    label = binary_label(i + 1, N)
+    label = binary_label(i + 1, param['n_frame'] * nbrVariables)
+    Y = stack_arrays(Y, label)
 
   return X, Y
 
@@ -113,14 +138,9 @@ def load_data(n_classes):
 def main():        
   param = ut.load_cnf()
   data = load_data(param['n_classes'])
-  print(data.shape)
-  print(data_class(data, 0, 1).shape)
-  print(data[0][0][:10])
   X, Y = create_features(data, param)
-  #data = data_norm(data)
-  print(Y.shape)
-  print(X.shape)
-  #save_data(X, Y, param)
+  X = data_norm(X)
+  save_data(X, Y, param)
 
 
 if __name__ == '__main__':   
