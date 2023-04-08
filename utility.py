@@ -134,10 +134,60 @@ def updWV_sgdm(ann, param, dE_dW, V):
 
 # Measure
 def metricas(a, y):
-  pass
+  cm = confusion_matrix(a,y)
+  k = cm.shape[0]
+  fscore_result = [0] * (k + 1)
+  
+  for j in range(k):
+    fscore_result[j] = fscore(j, cm, k)
+
+  fscore_result[k] = np.mean(fscore_result[:-1])
+
+  return cm, fscore_result
     
 
 #Confusion matrix
 def confusion_matrix(a, y):
-  pass
+	k, N = y.shape
+	cm = np.zeros((k, k), dtype=int)
 
+	for i in range(k):
+		for j in range(k):
+			for n in range(N):
+				if y[j, n] == 1 and a[i, n] == 1:
+					cm[i, j] += 1
+
+	return cm
+
+#Function in charge of calculating the precision
+def precision(i, cm, k):
+	suma = np.sum(cm[i])
+
+	if (suma > 0):
+		prec = cm[i][i] / suma
+	else:
+		prec = 0
+    
+	return prec
+
+#Function in charge of calculating the recall
+def recall(j, cm, k):
+	suma = np.sum(cm[:, j])
+    
+	if (suma > 0):
+		rec = cm[j][j] / suma
+	else: 
+		rec = 0
+    
+	return rec
+
+#Function in charge of calculating the fscore
+def fscore(j, cm, k):
+	numerator = precision(j, cm, k) * recall(j, cm, k)
+	denominator = precision(j, cm, k) + recall(j, cm, k)
+
+	if 0 == denominator:
+		return 0
+  
+	fscore = 2 * (numerator / denominator) 
+	return fscore
