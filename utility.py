@@ -89,10 +89,10 @@ def forward(ann, param, xv):
 
   for i in range(1, L+1):
     if (i == L):
-      z[i] = np.dot(w[i], a[i-1])
+      z[i] = w[i] @ a[i-1]
       a[i] = act_function(param['g_fun'],z[i])
     else:
-      z[i] = np.dot(w[i], a[i-1])
+      z[i] = w[i] @ a[i-1]
       a[i] = act_function(param['g_fun'],z[i])
   return a[L]
 
