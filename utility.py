@@ -79,8 +79,22 @@ def create_ann(hidden_nodes, X):
 
 
 # Feed-forward of SNN
-def forward(ann, param, X):
-  pass
+def forward(ann, param, xv):
+  L = ann['L']
+  w = ann['W']
+  a = ann['a']
+  z = ann['z']
+
+  a[0] = xv
+
+  for i in range(1, L+1):
+    if (i == L):
+      z[i] = np.dot(w[i], a[i-1])
+      a[i] = act_function(param['g_fun'],z[i])
+    else:
+      z[i] = np.dot(w[i], a[i-1])
+      a[i] = act_function(param['g_fun'],z[i])
+  return a[L]
 
 
 #Activation function
