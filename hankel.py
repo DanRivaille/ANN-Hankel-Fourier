@@ -43,7 +43,6 @@ def svd(H):
 def compute_next_level(H, max_level, current_level, C, S_components):
   U, S, Vt = svd(H)
   H1, H2 = decompose_matrix(U, S, Vt)
-  print(H1, H2)
   
   if max_level == current_level:
     C1 = extract_dyadic_component(H1)
@@ -70,7 +69,7 @@ H = create_hankel_matrix(X, 2)
 
 C = []
 S_c = []
-max_level = 1
+max_level = 3
 initial_level = 1
 compute_next_level(H, max_level, initial_level, C, S_c)
 
@@ -78,3 +77,6 @@ print(H)
 
 print(len(C))
 print(C)
+print(X)
+print(np.sum(np.array(C), axis=0))
+
