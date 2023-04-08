@@ -11,10 +11,12 @@ def calculate_entropy(x, N, Ix):
 
         # Se obtienen la cantidad de muestras dentro del intervalo actual
         ni = np.where(np.logical_and(x >= lower_bound, x < upper_bound))[0].shape[0]
-        pi = ni / N
 
-        entropy = pi * np.log2(pi)
-        cross_entropy += entropy
+        if ni != 0:
+          pi = ni / N
+
+          entropy = pi * np.log2(pi)
+          cross_entropy += entropy
 
     return -cross_entropy
 
