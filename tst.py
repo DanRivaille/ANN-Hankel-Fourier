@@ -33,7 +33,7 @@ def main():
   xv, yv  = load_data_test()
   ann = ut.create_ann(param['hidden_nodes'], xv)
   ann['W'] = load_w(ann['L'])
-  aL = ut.get_one_hot(np.argmax(ut.forward(ann, param, xv), axis=0)+1).T
+  aL = ut.get_one_hot(np.argmax(ut.forward(ann, param, xv), axis=0) + 1).T
   cm, Fsc = ut.metricas(aL, yv)
   save_measure(cm, Fsc)
 		
