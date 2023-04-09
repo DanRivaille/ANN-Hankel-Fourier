@@ -8,10 +8,10 @@ from fourier import compute_fourier
 def save_data(X, Y, param):
   x_train, y_train, x_test, y_test = create_dtrn_dtst(X, Y, param['p_train'])
 
-  np.savetxt('dtrn.csv', x_train)
+  np.savetxt('dtrn.csv', x_train, delimiter=',')
   np.savetxt('etrn.csv', y_train)
 
-  np.savetxt('dtst.csv', x_test)
+  np.savetxt('dtst.csv', x_test, delimiter=',')
   np.savetxt('etst.csv', y_test)
 
 
