@@ -140,13 +140,28 @@ def dev_sigmoid(x):
 
 #Feed-Backward of SNN
 def gradW(ann, param, e):
-  pass
 
+  pass
 
 # Update W and V
 def updWV_sgdm(ann, param, dE_dW, V):
-  pass
+  L = ann['L']
+  beta = param['beta']
+  mu = param['mu']
+  W = ann['W']
 
+  for l in range(1, L+1):
+      V[l] = beta * V[l] + mu * dE_dW[l]
+      W[l] = W[l] - V[l]
+  
+
+# Get MSE
+def get_mse(y_pred, y_true):
+  N = y_true.shape[1]
+  e = y_pred - y_true
+  mse = (np.sum(e**2) / (2*N))
+
+  return mse
 
 # Measure
 def metricas(a, y):
