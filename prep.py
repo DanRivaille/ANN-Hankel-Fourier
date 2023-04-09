@@ -16,15 +16,14 @@ def save_data(X, Y, param):
 
 
 def create_dtrn_dtst(input, output, p_train):
-  # TODO: Shuffle data
-  N = output.shape[0]
-  index_cut = int(N * p_train)
-
   data = np.concatenate((input, output.reshape(-1, 1)), axis=1)
   np.random.shuffle(data)
 
   input = data[:, :-1]
   output = data[:, -1]
+
+  N = output.shape[0]
+  index_cut = int(N * p_train)
 
   x_train = input[:index_cut]
   y_train = output[:index_cut]
