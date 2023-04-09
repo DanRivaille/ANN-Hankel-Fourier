@@ -3,6 +3,7 @@
 *.npz
 dev.py
 *.swp
+.idea
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

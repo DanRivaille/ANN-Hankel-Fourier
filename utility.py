@@ -36,16 +36,15 @@ def load_cnf():
   return param
 
 
-def get_one_hot(y):
-  K = np.unique(y).shape[0]
+def get_one_hot(y, K):
   res = np.eye(K)[(y-1).reshape(-1)]
   return res.reshape(list(y.shape)+[K]).astype(int)
 
 
 # Load data from filename
-def load_data(file_x, file_y):
+def load_data(file_x, file_y, m):
   X = np.loadtxt(file_x, delimiter=',', dtype=float).T
-  y = get_one_hot(np.loadtxt(file_y, dtype=int)).T
+  y = get_one_hot(np.loadtxt(file_y, dtype=int), m).T
   return X, y
 
 

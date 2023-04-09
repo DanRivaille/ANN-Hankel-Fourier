@@ -1,12 +1,5 @@
 import numpy as np
 
-def extract_component(H):
-  first_row = H[0]
-  last_colu = H[:, -1][1:]
-  component = np.concatenate((first_row, last_colu))
-  return component
-
-
 def extract_dyadic_component(H):
   a = np.concatenate((H[0], H[1, -1:]))
   b = np.concatenate((H[0, :1], H[1]))
@@ -63,30 +56,3 @@ def compute_singular_decomposition(frame, j):
   compute_next_level(H_matrix, j, 1, C, Sc)
 
   return C, Sc
-
-
-X = np.array([3.5186, 3.2710, 1.0429, 2.3774, 0.0901, 1.7010, 1.2509, 0.6459])
-
-L = 3
-H = create_hankel_matrix(X, L)
-
-X = np.array(list(range(1, 9)), dtype=float)
-
-L = 2
-H = create_hankel_matrix(X, 2)
-
-C = []
-S_c = []
-max_level = 3
-initial_level = 1
-compute_next_level(H, max_level, initial_level, C, S_c)
-"""
-
-print(H)
-
-print(len(C))
-print(C)
-print(X)
-print(np.sum(np.array(C), axis=0))
-"""
-

@@ -18,22 +18,20 @@ def load_w(L):
   return W
 
 
-def load_data_test():
-  #FILE_X = 'dtst.csv'
-  #FILE_Y = 'etst.csv'
-  FILE_X = 'dtrn.csv'
-  FILE_Y = 'etrn.csv'
-  X_test, y_test = ut.load_data(FILE_X, FILE_Y)
+def load_data_test(param):
+  FILE_X = 'dtst.csv'
+  FILE_Y = 'etst.csv'
+  X_test, y_test = ut.load_data(FILE_X, FILE_Y, param['n_classes'])
   return X_test, y_test
     
 
 # Beginning ...
 def main():			
   param = ut.load_cnf()
-  xv, yv  = load_data_test()
+  xv, yv  = load_data_test(param)
   ann = ut.create_ann(param['hidden_nodes'], xv)
   ann['W'] = load_w(ann['L'])
-  aL = ut.get_one_hot(np.argmax(ut.forward(ann, param, xv), axis=0) + 1).T
+  aL = ut.get_one_hot(np.argmax(ut.forward(ann, param, xv), axis=0) + 1, param['n_classes']).T
   cm, Fsc = ut.metricas(aL, yv)
   save_measure(cm, Fsc)
 		

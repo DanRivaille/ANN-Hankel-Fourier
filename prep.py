@@ -8,22 +8,27 @@ from fourier import compute_fourier
 def save_data(X, Y, param):
   x_train, y_train, x_test, y_test = create_dtrn_dtst(X, Y, param['p_train'])
 
-  np.savetxt('dtrn.csv', x_train)
+  np.savetxt('dtrn.csv', x_train, delimiter=',')
   np.savetxt('etrn.csv', y_train)
 
-  np.savetxt('dtst.csv', x_test)
+  np.savetxt('dtst.csv', x_test, delimiter=',')
   np.savetxt('etst.csv', y_test)
 
 
 def create_dtrn_dtst(input, output, p_train):
-  # TODO: Shuffle data
+  data = np.concatenate((input, output.reshape(-1, 1)), axis=1)
+  np.random.shuffle(data)
+
+  input = data[:, :-1]
+  output = data[:, -1]
+
   N = output.shape[0]
   index_cut = int(N * p_train)
 
-  x_train = input[:, :index_cut]
+  x_train = input[:index_cut]
   y_train = output[:index_cut]
 
-  x_test = input[:, index_cut:]
+  x_test = input[index_cut:]
   y_test = output[index_cut:]
 
   return x_train, y_train, x_test, y_test
@@ -33,11 +38,9 @@ def create_dtrn_dtst(input, output, p_train):
 def data_norm(X):
   a = 0.01
   b = 0.99
-  n_classes = X.shape[0]
   D = X.shape[1]
-  for i in range(n_classes):
-    for j in range(D):
-      X[i][j] = normalize_var(X[i][j], a, b)
+  for i in range(D):
+    X[:, i] = normalize_var(X[:, i], a, b)
 
   return X
 
@@ -103,14 +106,12 @@ def stack_arrays(stacked_array, new_array):
 # Create Features from Data
 def create_features(data, param):
   nbrClass = param['n_classes']
-  nbrVariables = data.shape[0]
-  N = data.shape[-1]
+  nbrVariables = data.shape[1]
 
   Y = np.array([])
   X = np.array([])
 
   for i in range(nbrClass):
-    datF = np.array([])
     for j in range(nbrVariables):
       x = data_class(data, j, i)
       F = hankel_features(x, param['n_frame'], param['l_frame'], param['j_desc'])

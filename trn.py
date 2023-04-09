@@ -36,17 +36,17 @@ def init_ann(param, x):
 
 
 # Load data to train the SNN
-def load_data_trn():
+def load_data_trn(param):
   FILE_X = 'dtrn.csv'
   FILE_Y = 'etrn.csv'
-  X_train, y_train = ut.load_data(FILE_X, FILE_Y)
+  X_train, y_train = ut.load_data(FILE_X, FILE_Y, param['n_classes'])
   return X_train, y_train
 
 
 # Beginning ...
 def main():
   param = ut.load_cnf()            
-  xe, ye = load_data_trn()
+  xe, ye = load_data_trn(param)
   W = train(xe, ye, param)
   #W, Cost = train(xe, ye, param)             
   #save_w_cost(W, Cost)
