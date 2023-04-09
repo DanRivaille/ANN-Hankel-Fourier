@@ -136,16 +136,44 @@ def dev_sigmoid(x):
   f_x = sigmoid(x)
   return f_x * (1 - f_x)
 
-
 #Feed-Backward of SNN
 def gradW(ann, param, e):
-  pass
+  L = ann['L']
+  a = ann['a']
+  z = ann['z']
+  w = ann['W']
+  dl = [None]*(L + 1)
+  de_dw = [None]*(L + 1)
 
+  dl[L] = e * deriva_act(5, z[L])
+  de_dw[L] = dl[L] @ a[L-1].T
+
+  for l in range(L-1, 0, -1):
+    dl[l] = (w[l+1].T @ dl[l+1]) * deriva_act(param['g_fun'], z[l])
+    de_dw[l] = dl[l] @ a[l-1].T
+
+  return de_dw
 
 # Update W and V
 def updWV_sgdm(ann, param, dE_dW, V):
-  pass
+  L = ann['L']
+  beta = param['beta']
+  mu = param['mu']
+  W = ann['W']
 
+  for l in range(1, L+1):
+      V[l] = beta * V[l] + mu * dE_dW[l]
+      W[l] = W[l] - V[l]
+
+  return W, V
+
+# Get MSE
+def get_mse(y_pred, y_true):
+  N = y_true.shape[1]
+  e = y_pred - y_true
+  mse = (np.sum(e**2) / (2*N))
+
+  return mse
 
 # Measure
 def metricas(a, y):
