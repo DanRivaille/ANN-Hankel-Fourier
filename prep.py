@@ -1,8 +1,5 @@
-import numpy      as np
-import utility    as ut
-from hankel import compute_singular_decomposition
-from entropy import calculate_entropy
-from fourier import compute_fourier
+import numpy as np
+import utility as ut
 
 # Save Data from  Hankel's features
 def save_data(X, Y, param):
@@ -44,6 +41,7 @@ def data_norm(X):
 
   return X
 
+
 def normalize_var(x, a=0.01, b=0.99):
   x_min = x.min()
   x_max = x.max()
@@ -54,10 +52,40 @@ def normalize_var(x, a=0.01, b=0.99):
   return x
 
 
+# E(x)
+def calculate_entropy(x, N, Ix):
+  interval_range, x_min, x_max = calculate_range(x, Ix)
+
+  cross_entropy = 0
+  for i in range(Ix):
+    lower_bound = x_min + interval_range * i
+    upper_bound = lower_bound + interval_range
+
+    # Se obtienen la cantidad de muestras dentro del intervalo actual
+    ni = np.where(np.logical_and(x >= lower_bound, x < upper_bound))[0].shape[0]
+
+    if ni != 0:
+      pi = ni / N
+
+      entropy = pi * np.log2(pi)
+      cross_entropy += entropy
+
+  return -cross_entropy
+
+
+def calculate_range(x, Ix, x_min=0.01, x_max=1):
+  range = (x_max - x_min) / Ix
+  return range, x_min, x_max
+
+
 # Binary Label
 def binary_label(class_i, N):
   labels_class = np.repeat(class_i, N)
   return labels_class
+
+
+def compute_fourier(X):
+  return np.fft.fft(X)
 
 
 # Fourier spectral entropy
@@ -66,13 +94,68 @@ def entropy_spectral(component):
   Ix = int(np.sqrt(N))
 
   c_fourier = compute_fourier(component)
-  c_fourier = normalize_var(c_fourier)
-  return calculate_entropy(c_fourier, N, Ix)
+  c_fourier_normalized = normalize_var(c_fourier)
+  return calculate_entropy(c_fourier_normalized, N, Ix)
+
+
+def extract_dyadic_component(H):
+  a = np.concatenate((H[0], H[1, -1:]))
+  b = np.concatenate((H[0, :1], H[1]))
+  c = (a + b) / 2
+  return c
+
+
+def create_hankel_matrix(signal, L):
+  N = signal.shape[0]
+  K = N - L + 1
+  hankel = np.empty((L, K))
+  for i in range(L):
+    hankel[i] = signal[i:i + K]
+
+  return hankel
+
+
+def get_H(U, S, Vt, i):
+  Hi = S[i] * (U[:, i].reshape(-1, 1) @ Vt[i, :].reshape(1, -1))
+  return Hi
+
+
+def decompose_matrix(U, S, Vt):
+  H1 = get_H(U, S, Vt, 0)
+  H2 = get_H(U, S, Vt, 1)
+  return H1, H2
+
+
+def svd(H):
+  U, S, Vt = np.linalg.svd(H, full_matrices=False)
+  return U, S, Vt
+
+
+def compute_next_level(H, max_level, current_level, C, S_components):
+  U, S, Vt = svd(H)
+  H1, H2 = decompose_matrix(U, S, Vt)
+
+  if max_level == current_level:
+    C1 = extract_dyadic_component(H1)
+    C2 = extract_dyadic_component(H2)
+
+    C.append(C1)
+    C.append(C2)
+    S_components.append(S[0])
+    S_components.append(S[1])
+  else:
+    compute_next_level(H1, max_level, current_level + 1, C, S_components)
+    compute_next_level(H2, max_level, current_level + 1, C, S_components)
 
 
 # Hankel-SVD
-def hankel_svd():
-  pass
+def hankel_svd(frame, j):
+  C = []
+  Sc = []
+  H_matrix = create_hankel_matrix(frame, 2)
+  compute_next_level(H_matrix, j, 1, C, Sc)
+
+  return C, Sc
 
 
 # Hankel's features 
@@ -82,7 +165,7 @@ def hankel_features(x, nFrame, lFrame, j):
     lower_bound = n * lFrame
     upper_bound = (n + 1) * lFrame
     current_frame = x[lower_bound:upper_bound]
-    C, Sc = compute_singular_decomposition(current_frame, j)
+    C, Sc = hankel_svd(current_frame, j)
 
     entropy_c = []
     for c in C:
@@ -92,11 +175,12 @@ def hankel_features(x, nFrame, lFrame, j):
     F[n] = np.concatenate((entropy_c, Sc))
 
   return F
-  
+
 
 # Obtain j-th variables of the i-th class
 def data_class(x, j, i):
   return x[i, j]
+
 
 def stack_arrays(stacked_array, new_array):
   if stacked_array.shape[0] != 0:
@@ -118,7 +202,7 @@ def create_features(data, param):
       x = data_class(data, j, i)
       F = hankel_features(x, param['n_frame'], param['l_frame'], param['j_desc'])
       X = stack_arrays(X, F)
-    
+
     label = binary_label(i + 1, param['n_frame'] * nbrVariables)
     Y = stack_arrays(Y, label)
 
@@ -138,7 +222,7 @@ def load_data(n_classes):
 
 
 # Beginning ...
-def main():        
+def main():
   param = ut.load_cnf()
   data = load_data(param['n_classes'])
   X, Y = create_features(data, param)
@@ -146,6 +230,5 @@ def main():
   save_data(X, Y, param)
 
 
-if __name__ == '__main__':   
-	 main()
-
+if __name__ == '__main__':
+  main()

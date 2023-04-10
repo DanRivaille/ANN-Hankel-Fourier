@@ -11,7 +11,7 @@ def save_w_mse(W, ann_MSE):
 
 def create_momentum(W, L):
   W_size = L + 1
-  V = [None]* W_size
+  V = [None] * W_size
 
   for i in range(1, W_size):
     V[i] = np.zeros_like(W[i])
@@ -55,8 +55,8 @@ def train(x, y, param):
   mse = []
 
   for i in range(param['max_iter']):
-    #X, Y = ut.sort_data_random(x,y)
-    ann_mse = trn_minibatch(x, y, ann, param)
+    X, Y = ut.sort_data_random(x,y, x.shape[0])
+    ann_mse = trn_minibatch(X, Y, ann, param)
     mse.append(np.mean(ann_mse))
 
     if (i % 10) == 0:
@@ -90,5 +90,5 @@ def main():
 
 
 if __name__ == '__main__':   
-	 main()
+  main()
 

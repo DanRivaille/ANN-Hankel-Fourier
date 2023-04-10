@@ -175,6 +175,13 @@ def updWV_sgdm(ann, param, dE_dW, V):
 
   return W, V
 
+def sort_data_random(x, y, D):
+  data = np.concatenate((x, y))
+
+  input = data[:D]
+  output = data[D:]
+
+  return input, output
 
 # Get MSE
 def get_mse(y_pred, y_true):
