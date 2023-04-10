@@ -3,7 +3,7 @@ import utility as ut
 
 # Save Data from  Hankel's features
 def save_data(X, Y, param):
-  x_train, y_train, x_test, y_test = create_dtrn_dtst(X, Y, param['p_train'])
+  x_train, y_train, x_test, y_test = create_dtrn_dtst(X, Y, param['n_frame'], param['n_classes'], param['p_train'])
 
   np.savetxt('dtrn.csv', x_train, delimiter=',')
   np.savetxt('etrn.csv', y_train)
@@ -12,21 +12,34 @@ def save_data(X, Y, param):
   np.savetxt('etst.csv', y_test)
 
 
-def create_dtrn_dtst(input, output, p_train):
-  data = np.concatenate((input, output.reshape(-1, 1)), axis=1)
-  np.random.shuffle(data)
-
-  input = data[:, :-1]
-  output = data[:, -1]
-
+def create_dtrn_dtst(input, output, nFrame, n_classes, p_train):
   N = output.shape[0]
-  index_cut = int(N * p_train)
+  nbrVariables = N // (n_classes * nFrame)
+  range_class = nFrame * nbrVariables
+  index_cut = int(range_class * p_train)
+  data = np.concatenate((input, output.reshape(-1, 1)), axis=1)
 
-  x_train = input[:index_cut]
-  y_train = output[:index_cut]
+  train_data = np.array([])
+  test_data = np.array([])
 
-  x_test = input[index_cut:]
-  y_test = output[index_cut:]
+  for i in range(n_classes):
+    data_class = data[i * range_class:(i + 1) * range_class]
+  
+    train_class = data_class[:index_cut]
+    test_class = data_class[index_cut:]
+
+    train_data = stack_arrays(train_data, train_class)
+    test_data = stack_arrays(test_data, test_class)
+
+
+  np.random.shuffle(train_data)
+  np.random.shuffle(test_data)
+
+  x_train = train_data[:, :-1]
+  y_train = train_data[:, -1]
+
+  x_test = test_data[:, :-1]
+  y_test = test_data[:, -1]
 
   return x_train, y_train, x_test, y_test
 
@@ -198,6 +211,7 @@ def create_features(data, param):
   X = np.array([])
 
   for i in range(nbrClass):
+    print('Processing class', i + 1)
     for j in range(nbrVariables):
       x = data_class(data, j, i)
       F = hankel_features(x, param['n_frame'], param['l_frame'], param['j_desc'])

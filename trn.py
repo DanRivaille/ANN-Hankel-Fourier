@@ -34,6 +34,8 @@ def trn_minibatch(x, y, ann, param):
   V = create_momentum(ann['W'], ann['L'])
   nBatch = N // M
   ann_mse = []
+  min_mse = 10
+  W = None
 
   for n in range(0, nBatch):
     xe, ye = get_minibatch(x, y, n, M)
@@ -44,9 +46,14 @@ def trn_minibatch(x, y, ann, param):
     cost = ut.get_mse(act, ye)
     ann_mse.append(cost)
 
+    if cost < min_mse:
+      W = ann['W']
+      min_mse = cost
+
     de_dw = ut.gradW(ann, param, e)
     ann['W'], V = ut.updWV_sgdm(ann, param, de_dw, V)
 
+  ann['W'] = W
   return ann_mse
 
 #SNN's Training 
