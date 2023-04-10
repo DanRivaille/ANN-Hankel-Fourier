@@ -10,45 +10,57 @@ def save_w_mse(W, ann_MSE):
 
 
 def create_momentum(W, L):
-  V = [None]*(L+1)
-  for i in range(1, L+1 ):
+  W_size = L + 1
+  V = [None]* W_size
+
+  for i in range(1, W_size):
     V[i] = np.zeros_like(W[i])
+
   return V
+
+def get_minibatch(x, y, n, M):
+  lower_bound = n * M
+  upper_bound = (n + 1) * M
+
+  x_batch = x[:, lower_bound: upper_bound]
+  y_batch = y[:, lower_bound: upper_bound]
+
+  return x_batch, y_batch
 
 #miniBatch-SGDM's Training 
 def trn_minibatch(x, y, ann, param):
   N = len(x[0])
   M = param['M_batch']
   V = create_momentum(ann['W'], ann['L'])
-  nBatch = N//M
+  nBatch = N // M
   ann_mse = []
 
   for n in range(0, nBatch):
-    xe = x[:,n*M:(n+1)*M]
-    ye = y[:,n*M:(n+1)*M]
-    act = ut.forward(ann, param, xe) 
-    #act = ut.get_one_hot(np.argmax(ut.forward(ann, param, xe), axis=0) + 1, param['n_classes']).T
-    #print(act)
+    xe, ye = get_minibatch(x, y, n, M)
+
+    act = ut.forward(ann, param, xe)
+
     e = act - ye
     cost = ut.get_mse(act, ye)
     ann_mse.append(cost)
+
     de_dw = ut.gradW(ann, param, e)
     ann['W'], V = ut.updWV_sgdm(ann, param, de_dw, V)
 
-  return ann_mse, ann
+  return ann_mse
 
 #SNN's Training 
 def train(x, y, param):
   ann = init_ann(param, x)
   mse = []
 
-  for i in range(1, param['max_iter'] + 1): 
+  for i in range(param['max_iter']):
     #X, Y = ut.sort_data_random(x,y)
-    ann_mse, ann = trn_minibatch(x, y, ann, param)
+    ann_mse = trn_minibatch(x, y, ann, param)
     mse.append(np.mean(ann_mse))
 
-    if np.mod(i,10) == 0:
-      print('\n Iterar-SGD: ', i, mse[i-1])
+    if (i % 10) == 0:
+      print('\n Iterar-SGD: ', i, mse[i])
 
   return ann['W'], mse
 
@@ -73,11 +85,8 @@ def load_data_trn(param):
 def main():
   param = ut.load_cnf()            
   xe, ye = load_data_trn(param)
-
   W, Cost = train(xe, ye, param)
-
   save_w_mse(W, Cost)
-  #np.savez('w_snn.npz', *W)
 
 
 if __name__ == '__main__':   

@@ -12,9 +12,7 @@ def load_w(L):
 
   for i in range(1, L + 1):
     W[i] = pesos[f'arr_{i}']
-  
-  for i in range(1, L + 1):
-    print(W[i].shape)
+
   return W
 
 
@@ -34,8 +32,8 @@ def main():
   aL = ut.get_one_hot(np.argmax(ut.forward(ann, param, xv), axis=0) + 1, param['n_classes']).T
   cm, Fsc = ut.metricas(aL, yv)
   save_measure(cm, Fsc)
-		
+
 
 if __name__ == '__main__':   
-	 main()
+  main()
 

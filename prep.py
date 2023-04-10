@@ -79,7 +79,9 @@ def hankel_svd():
 def hankel_features(x, nFrame, lFrame, j):
   F = np.empty((nFrame, 2 ** (j + 1)))
   for n in range(nFrame):
-    current_frame = x[n:n + lFrame]
+    lower_bound = n * lFrame
+    upper_bound = (n + 1) * lFrame
+    current_frame = x[lower_bound:upper_bound]
     C, Sc = compute_singular_decomposition(current_frame, j)
 
     entropy_c = []
