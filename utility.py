@@ -176,7 +176,9 @@ def updWV_sgdm(ann, param, dE_dW, V):
   return W, V
 
 def sort_data_random(x, y, D):
-  data = np.concatenate((x, y))
+  data = np.concatenate((x, y)).T
+  np.random.shuffle(data)
+  data = data.T
 
   input = data[:D]
   output = data[D:]
