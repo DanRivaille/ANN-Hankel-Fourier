@@ -98,7 +98,7 @@ def binary_label(class_i, N):
 
 
 def compute_fourier(X):
-  return np.fft.fft(X)
+  return np.abs(np.fft.fft(X))
 
 
 # Fourier spectral entropy
